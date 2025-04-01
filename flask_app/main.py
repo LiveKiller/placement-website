@@ -4,8 +4,13 @@ from flask_jwt_extended import JWTManager, create_access_token, jwt_required, ge
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 import hashlib
+import urllib.parse
 from pymongo import MongoClient
+from dotenv import load_dotenv
+load_dotenv()
 
+print(os.getenv('MONGO_USER'))  # Should print 'user-xxx'
+print(os.getenv('MONGO_PASSWORD')) 
 app = Flask(__name__)
 CORS(app)
 jwt = JWTManager(app)
@@ -13,8 +18,15 @@ jwt = JWTManager(app)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
 
-client = MongoClient(os.getenv('MONGO_URI'))
-db = client.get_database("chat_app")
+# Properly encode MongoDB credentials
+username = urllib.parse.quote_plus(os.getenv('MONGO_USER'))
+password = urllib.parse.quote_plus(os.getenv('MONGO_PASSWORD'))
+host = os.getenv('MONGO_HOST')
+db_name = os.getenv('MONGO_DB_NAME')
+
+MONGO_URI = f"mongodb://{username}:{password}@{host}/{db_name}?retryWrites=true&w=majority"
+client = MongoClient(MONGO_URI)
+db = client[db_name]
 users_collection = db["users"]
 admins_collection = db["admins"]
 
@@ -25,8 +37,7 @@ def generate_username(email):
     numeric_string = ''.join(numeric_filter)
     first_10_digits = numeric_string[:10]
     first_4_characters = hash_hex[:4]
-    username = f"anon{first_10_digits}{first_4_characters}"
-    return username
+    return f"anon{first_10_digits}{first_4_characters}"
 
 def is_admin(email):
     return admins_collection.find_one({"email": email}) is not None
