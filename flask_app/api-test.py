@@ -1,4 +1,4 @@
-# Create a test script (test_api.py)
+
 import requests
 import json
 
@@ -6,8 +6,6 @@ BASE_URL = "http://localhost:5000/api"
 admin_token = None
 user_token = None
 
-
-# Test function
 def test_endpoint(method, endpoint, data=None, token=None, expected_status=200):
     headers = {}
     if token:
@@ -58,7 +56,7 @@ test_endpoint("post", "admin/add-user", new_user, admin_token)
 # 3. Test user login
 print("\n=== TESTING USER LOGIN ===")
 # The default password should be TEST0_xamp
-success, result = test_endpoint("post", "login", {"registration_number": "TEST002", "password": "TEST0_xamp"})
+success, result = test_endpoint("post", "login", {"registration_number": "TEST002", "password": "TEST002"})
 if success:
     user_token = result.get("access_token")
     print(f"User token: {user_token[:10]}...")
