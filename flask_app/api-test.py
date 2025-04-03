@@ -1,42 +1,16 @@
 import requests
 import json
-<<<<<<< HEAD
 import pandas as pd
 import os
 import time
-=======
-import traceback
->>>>>>> de083dc222cdba94280defd84cb76aad50ebc0e3
 from datetime import datetime
 
 # Configuration
 BASE_URL = "http://localhost:5000/api"
-<<<<<<< HEAD
-ADMIN_REG = "231302050"  # Admin registration number
-ADMIN_PASSWORD = "admin@admin"  # Admin password
+ADMIN_REG = "ADMIN001"  # Admin registration number
+ADMIN_PASSWORD = "ADMIN001"  # Admin password
 TEST_USER_REG = f"TEST{int(time.time())}"  # Generate unique test user
 TEST_USER_EMAIL = f"test{int(time.time())}@example.com"
-=======
-admin_token = None
-user_token = None
-ERROR_LOG_FILE = "error_log.json"
-
-def log_error(endpoint, method, response, exception=None):
-    error_data = {
-        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "endpoint": endpoint,
-        "method": method.upper(),
-        "status_code": response.status_code if response else "N/A",
-        "response": response.text if response else "No response",
-        "stack_trace": traceback.format_exc() if exception else "None"
-    }
-    
-    try:
-        with open(ERROR_LOG_FILE, "a") as f:
-            f.write(json.dumps(error_data, indent=4) + "\n")
-    except Exception as e:
-        print(f"Failed to log error: {e}")
->>>>>>> de083dc222cdba94280defd84cb76aad50ebc0e3
 
 # For storing tokens
 tokens = {}
@@ -63,7 +37,6 @@ def run_test(name, method, endpoint, data=None, token=None, files=None, expected
     url = f"{BASE_URL}{endpoint}"
     print(f"Request: {method} {url}")
 
-<<<<<<< HEAD
     if data:
         print(f"Data: {json.dumps(data, indent=2)}")
 
@@ -106,46 +79,11 @@ def create_test_excel():
         'department': ['Computer Science', 'Electrical Engineering', 'Mechanical Engineering'],
         'course': ['B.Tech', 'M.Tech', 'PhD']
     })
-=======
-    try:
-        if method.lower() == "get":
-            response = requests.get(url, headers=headers)
-        elif method.lower() == "post":
-            response = requests.post(url, json=data, headers=headers)
-        else:
-            raise ValueError("Unsupported HTTP method")
-        
-        print(f"\nTesting {method.upper()} {endpoint}")
-        print(f"Status: {response.status_code} (Expected: {expected_status})")
-
-        if response.status_code != expected_status:
-            print("❌ Test failed! Check error_log.json for details.")
-            log_error(endpoint, method, response)
-            return False, None
-
-        print("✅ Test passed!")
-        return True, response.json()
-    
-    except Exception as e:
-        print("❌ Exception occurred! Check error_log.json for details.")
-        log_error(endpoint, method, response=None, exception=e)
-        return False, None
-
-# 1. Admin Login
-print("\n=== TESTING ADMIN LOGIN ===")
-admin_reg = input("Enter admin registration number: ")
-admin_pass = input("Enter admin password: ")
-success, result = test_endpoint("post", "login", {"registration_number": admin_reg, "password": admin_pass})
-if success:
-    admin_token = result.get("access_token")
-    print(f"Admin token: {admin_token[:10]}...")
->>>>>>> de083dc222cdba94280defd84cb76aad50ebc0e3
 
     filename = 'test_users.xlsx'
     df.to_excel(filename, index=False)
     return filename
 
-<<<<<<< HEAD
 
 def create_sample_profile_data(reg_number):
     """Create sample profile data for testing"""
@@ -180,47 +118,6 @@ def create_sample_profile_data(reg_number):
             "github_profile": "https://github.com/testuser",
             "portfolio_website": "https://testuser.com"
         }
-=======
-# 3. Test user login
-print("\n=== TESTING USER LOGIN ===")
-success, result = test_endpoint("post", "login", {"registration_number": "TEST002", "password": "TEST0_xamp"})
-if success:
-    user_token = result.get("access_token")
-    print(f"User token: {user_token[:10]}...")
-
-# 4. Test profile completion
-print("\n=== TESTING PROFILE COMPLETION ===")
-profile_data = {
-    "personal_details": {
-        "full_name": "Test User",
-        "date_of_birth": "2000-01-01",
-        "email": "test2@example.com",
-        "phone_number": "1234567890",
-        "address": "123 Test St"
-    },
-    "academic_details": {
-        "registration_number": "TEST002",
-        "department": "Computer Science",
-        "course": "B.Tech",
-        "year_of_study": "3",
-        "cgpa": "8.5",
-        "skills": ["Python", "JavaScript"],
-        "certifications": ["AWS Certified"],
-        "resume_link": "https://example.com/resume"
-    },
-    "internship_experience": {
-        "preferred_internship_domain": "Web Development",
-        "preferred_companies": ["Google", "Microsoft"],
-        "previous_internships": [
-            {"company": "TechCorp", "duration": "3 months", "role": "Intern", "description": "Developed web apps"}
-        ],
-        "projects": [{"title": "Project 1", "description": "Test project", "technologies": ["React", "Node.js"],
-                      "link": "https://github.com/test"}]
-    },
-    "additional_information": {
-        "linkedin_profile": "https://linkedin.com/in/test",
-        "github_profile": "https://github.com/test"
->>>>>>> de083dc222cdba94280defd84cb76aad50ebc0e3
     }
 
 
@@ -233,7 +130,6 @@ def run_tests():
         "start_time": datetime.now().isoformat()
     }
 
-<<<<<<< HEAD
     try:
         # Test health endpoint
         test_results["total"] += 1
@@ -409,10 +305,3 @@ def run_tests():
 
 if __name__ == "__main__":
     run_tests()
-=======
-# 7. Test login with new password
-print("\n=== TESTING LOGIN WITH NEW PASSWORD ===")
-test_endpoint("post", "login", {"registration_number": "TEST002", "password": "NewPassword123"})
-
-print("\n=== TESTING COMPLETE ===")
->>>>>>> de083dc222cdba94280defd84cb76aad50ebc0e3
