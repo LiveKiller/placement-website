@@ -1,0 +1,96 @@
+{
+    "timestamp": "2025-04-03 10:30:27",
+    "endpoint": "admin/add-user",
+    "method": "POST",
+    "status_code": "N/A",
+    "response": "No response",
+    "stack_trace": "None"
+}
+{
+    "timestamp": "2025-04-03 10:30:30",
+    "endpoint": "login",
+    "method": "POST",
+    "status_code": "N/A",
+    "response": "No response",
+    "stack_trace": "None"
+}
+{
+    "timestamp": "2025-04-03 10:30:32",
+    "endpoint": "complete-profile",
+    "method": "POST",
+    "status_code": "N/A",
+    "response": "No response",
+    "stack_trace": "None"
+}
+{
+    "timestamp": "2025-04-03 10:30:34",
+    "endpoint": "profile",
+    "method": "GET",
+    "status_code": "N/A",
+    "response": "No response",
+    "stack_trace": "None"
+}
+{
+    "timestamp": "2025-04-03 10:30:36",
+    "endpoint": "change-password",
+    "method": "POST",
+    "status_code": "N/A",
+    "response": "No response",
+    "stack_trace": "None"
+}
+{
+    "timestamp": "2025-04-03 10:30:38",
+    "endpoint": "login",
+    "method": "POST",
+    "status_code": "N/A",
+    "response": "No response",
+    "stack_trace": "None"
+}
+{
+    "timestamp": "2025-04-03 10:36:48",
+    "endpoint": "admin/add-user",
+    "method": "POST",
+    "status_code": "N/A",
+    "response": "No response",
+    "stack_trace": "None"
+}
+{
+    "timestamp": "2025-04-03 10:36:51",
+    "endpoint": "login",
+    "method": "POST",
+    "status_code": "N/A",
+    "response": "No response",
+    "stack_trace": "None"
+}
+{
+    "timestamp": "2025-04-03 10:36:53",
+    "endpoint": "complete-profile",
+    "method": "POST",
+    "status_code": "N/A",
+    "response": "No response",
+    "stack_trace": "None"
+}
+{
+    "timestamp": "2025-04-03 10:36:55",
+    "endpoint": "profile",
+    "method": "GET",
+    "status_code": "N/A",
+    "response": "No response",
+    "stack_trace": "None"
+}
+{
+    "timestamp": "2025-04-03 10:36:57",
+    "endpoint": "change-password",
+    "method": "POST",
+    "status_code": "N/A",
+    "response": "No response",
+    "stack_trace": "None"
+}
+{
+    "timestamp": "2025-04-03 10:37:00",
+    "endpoint": "login",
+    "method": "POST",
+    "status_code": "N/A",
+    "response": "No response",
+    "stack_trace": "None"
+}
