@@ -296,9 +296,9 @@ def run_tests():
     print(f"Success rate: {(test_results['passed'] / test_results['total']) * 100:.2f}%")
     print(f"Duration: {test_results['duration_seconds']:.2f} seconds")
 
-    # Save results to file
-    with open(f"test_results_{int(time.time())}.json", "w") as f:
-        json.dump(test_results, f, indent=2)
+    # # Save results to file
+    # with open(f"test_results_{int(time.time())}.json", "w") as f:
+    #     json.dump(test_results, f, indent=2)
 
     return test_results
 
