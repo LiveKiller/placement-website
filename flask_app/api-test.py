@@ -1,10 +1,28 @@
-
 import requests
 import json
+import traceback
+from datetime import datetime
 
 BASE_URL = "http://localhost:5000/api"
 admin_token = None
 user_token = None
+ERROR_LOG_FILE = "error_log.json"
+
+def log_error(endpoint, method, response, exception=None):
+    error_data = {
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "endpoint": endpoint,
+        "method": method.upper(),
+        "status_code": response.status_code if response else "N/A",
+        "response": response.text if response else "No response",
+        "stack_trace": traceback.format_exc() if exception else "None"
+    }
+    
+    try:
+        with open(ERROR_LOG_FILE, "a") as f:
+            f.write(json.dumps(error_data, indent=4) + "\n")
+    except Exception as e:
+        print(f"Failed to log error: {e}")
 
 def test_endpoint(method, endpoint, data=None, token=None, expected_status=200):
     headers = {}
@@ -13,27 +31,31 @@ def test_endpoint(method, endpoint, data=None, token=None, expected_status=200):
 
     url = f"{BASE_URL}/{endpoint}"
 
-    if method.lower() == "get":
-        response = requests.get(url, headers=headers)
-    elif method.lower() == "post":
-        response = requests.post(url, json=data, headers=headers)
+    try:
+        if method.lower() == "get":
+            response = requests.get(url, headers=headers)
+        elif method.lower() == "post":
+            response = requests.post(url, json=data, headers=headers)
+        else:
+            raise ValueError("Unsupported HTTP method")
+        
+        print(f"\nTesting {method.upper()} {endpoint}")
+        print(f"Status: {response.status_code} (Expected: {expected_status})")
 
-    print(f"\nTesting {method.upper()} {endpoint}")
-    print(f"Status: {response.status_code} (Expected: {expected_status})")
+        if response.status_code != expected_status:
+            print("❌ Test failed! Check error_log.json for details.")
+            log_error(endpoint, method, response)
+            return False, None
 
-    if response.status_code != expected_status:
-        print(f"❌ Test failed! Expected {expected_status}, got {response.status_code}")
-        print(f"Response: {response.text}")
+        print("✅ Test passed!")
+        return True, response.json()
+    
+    except Exception as e:
+        print("❌ Exception occurred! Check error_log.json for details.")
+        log_error(endpoint, method, response=None, exception=e)
         return False, None
 
-    print("✅ Test passed!")
-    try:
-        return True, response.json()
-    except:
-        return True, response.text
-
-
-# 1. Admin Login (You need to create an admin user first)
+# 1. Admin Login
 print("\n=== TESTING ADMIN LOGIN ===")
 admin_reg = input("Enter admin registration number: ")
 admin_pass = input("Enter admin password: ")
@@ -55,8 +77,7 @@ test_endpoint("post", "admin/add-user", new_user, admin_token)
 
 # 3. Test user login
 print("\n=== TESTING USER LOGIN ===")
-# The default password should be TEST0_xamp
-success, result = test_endpoint("post", "login", {"registration_number": "TEST002", "password": "TEST002"})
+success, result = test_endpoint("post", "login", {"registration_number": "TEST002", "password": "TEST0_xamp"})
 if success:
     user_token = result.get("access_token")
     print(f"User token: {user_token[:10]}...")
@@ -85,7 +106,8 @@ profile_data = {
         "preferred_internship_domain": "Web Development",
         "preferred_companies": ["Google", "Microsoft"],
         "previous_internships": [
-            {"company": "TechCorp", "duration": "3 months", "role": "Intern", "description": "Developed web apps"}],
+            {"company": "TechCorp", "duration": "3 months", "role": "Intern", "description": "Developed web apps"}
+        ],
         "projects": [{"title": "Project 1", "description": "Test project", "technologies": ["React", "Node.js"],
                       "link": "https://github.com/test"}]
     },
@@ -111,6 +133,6 @@ test_endpoint("post", "change-password", password_data, user_token)
 
 # 7. Test login with new password
 print("\n=== TESTING LOGIN WITH NEW PASSWORD ===")
-test_endpoint("post", "login", {"registration_number": "TEST001", "password": "NewPassword123"})
+test_endpoint("post", "login", {"registration_number": "TEST002", "password": "NewPassword123"})
 
 print("\n=== TESTING COMPLETE ===")
